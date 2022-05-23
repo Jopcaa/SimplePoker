@@ -1,15 +1,7 @@
 #
 # pokersim.py - Runs a Monte Carlo simulation of two Texas Hold'em hands
-#               with user-specified (or random) community cards
-#
-# Work to be done:
-# Add exhaustive search?
-# Add input checking for user input
-#   No duplicate cards or invalid input
-# Add support for random rank, defined suit (and vice versa)
-# Add support for random 'hand2' cards
-# Add test cases
-#
+
+
 import argparse
 import random
 
@@ -28,9 +20,7 @@ def readable_hand(cards):
 
 
 def hand_copy(cards):
-    #
-    # Returns copy of hand (replaces deepcopy with 20x speed improvement)
-    #
+
     results = []
     for i in cards:
         results.append(i)
@@ -43,7 +33,7 @@ def legal_hand(cards):
     # Returns False if hand is illegal
     #   Case 1: two or more of same card
     #   Case 2: random card
-    #
+
     for i in cards:
         if cards.count(i) > 1 or cards == [-1, -1]:
             return False
@@ -51,11 +41,11 @@ def legal_hand(cards):
 
 
 def valid_card(card):
-    #
+
     # Returns True if card is a valid card in text format (rank in (A-2),
     #  suit in (c, d, h, s) or wildcard (Xx)
     # Returns False if card is invalid
-    #
+
     if card[0] in ("X", "x", "A", "a", "K", "k", "Q", "q", "J", "j",
                    "T", "t", "9", "8", "7", "6", "5", "4", "3", "2") \
             and card[1] in ("x", "X", "c", "C", "d", "D", "h", "H", "s", "S"):
@@ -65,10 +55,10 @@ def valid_card(card):
 
 
 def hand_to_numeric(cards):
-    #
+
     # Converts alphanumeric hand to numeric values for easier comparisons
     # Also sorts cards based on rank
-    #
+
     card_rank = {"2": 0, "3": 1, "4": 2, "5": 3, "6": 4, "7": 5, "8": 6,
                  "9": 7, "T": 8, "J": 9, "Q": 10, "K": 11, "A": 12, "X": -1,
                          "t": 8, "j": 9, "q": 10, "k": 11, "a": 12, "x": -1}
@@ -83,9 +73,9 @@ def hand_to_numeric(cards):
 
 
 def check_flush(hand):
-    #
+
     # Returns True if hand is a Flush, otherwise returns False
-    #
+
     hand_suit = [hand[0][1], hand[1][1], hand[2][1], hand[3][1], hand[4][1]]
     for i in range(4):
         if hand_suit.count(i) == 5:
@@ -194,9 +184,9 @@ def highest_card(hand1, hand2):
         [hand1[0][0], hand1[1][0], hand1[2][0], hand1[3][0], hand1[4][0]]
     hand2_rank = \
         [hand2[0][0], hand2[1][0], hand2[2][0], hand2[3][0], hand2[4][0]]
-    #
+
     # Compare
-    #
+
     if hand1_rank > hand2_rank:
         return 0
     elif hand1_rank < hand2_rank:
@@ -208,11 +198,11 @@ def highest_card_straight(hand1, hand2):
     # Return 0 if hand1 is higher
     # Return 1 if hand2 is higher
     # Return 2 if equal
-    #
+
     # Compare second card first (to account for Ace low straights)
     # if equal, we could have Ace low straight, so compare first card.
     # If first card is Ace, that is the lower straight
-    #
+
     if hand1[1][0] > hand2[1][0]:
         return 0
     elif hand1[1][0] < hand2[1][0]:
@@ -225,17 +215,17 @@ def highest_card_straight(hand1, hand2):
 
 
 def compare_hands(hand1, hand2):
-    #
+
     # Compare two hands
     # Return 0 if hand1 is better
     # Return 1 if hand2 is better
     # Return 2 if equal
-    #
+
     result1 = []
     result2 = []
-    #
+
     # Check for straight flush
-    #
+
     if check_straightflush(hand1):
         if check_straightflush(hand2):
             return(highest_card_straight(hand1, hand2))
@@ -243,9 +233,9 @@ def compare_hands(hand1, hand2):
             return 0
     elif check_straightflush(hand2):
             return 1
-    #
+
     # Check for four of a kind
-    #
+
     result1 = check_fourofakind(hand1)
     result2 = check_fourofakind(hand2)
     if result1[0] == 1:
@@ -264,9 +254,9 @@ def compare_hands(hand1, hand2):
             return 0
     elif result2[0] == 1:
         return 1
-    #
+
     # Check for full house
-    #
+
     result1 = check_fullhouse(hand1)
     result2 = check_fullhouse(hand2)
     if result1[0] == 1:
@@ -285,9 +275,9 @@ def compare_hands(hand1, hand2):
             return 0
     elif result2[0] == 1:
         return 1
-    #
+
     # Check for flush
-    #
+
     if check_flush(hand1):
         if check_flush(hand2):
             return(highest_card(hand1, hand2))
@@ -295,9 +285,9 @@ def compare_hands(hand1, hand2):
             return 0
     elif check_flush(hand2):
         return 1
-    #
+
     # Check for straight
-    #
+
     if check_straight(hand1):
         if check_straight(hand2):
             temp = highest_card_straight(hand1, hand2)
@@ -306,9 +296,9 @@ def compare_hands(hand1, hand2):
             return 0
     elif check_straight(hand2):
         return 1
-    #
+
     # Check for three of a kind
-    #
+
     result1 = check_threeofakind(hand1)
     result2 = check_threeofakind(hand2)
     if result1[0] == 1:
@@ -327,9 +317,9 @@ def compare_hands(hand1, hand2):
             return 0
     elif result2[0] == 1:
         return 1
-    #
+
     # Check for two pair
-    #
+
     result1 = check_twopair(hand1)
     result2 = check_twopair(hand2)
     if result1[0] == 1:
@@ -348,9 +338,9 @@ def compare_hands(hand1, hand2):
             return 0
     elif result2[0] == 1:
         return 1
-    #
+
     # Check for one pair
-    #
+
     result1 = check_onepair(hand1)
     result2 = check_onepair(hand2)
     if result1[0] == 1:
@@ -373,16 +363,16 @@ def compare_hands(hand1, hand2):
 
 
 def best_five(hand, community):
-    #
+
     # Takes hand and community cards in numeric form
     # Returns best five cards
-    #
+
     currentbest = hand_copy(community)
     currentbest.sort()
     currentbest.reverse()
-    #
+
     # Compare current best to five cards including only one player card
-    #
+
     for m in range(2):
         for n in range(5):
             comparehand = hand_copy(community)
@@ -391,9 +381,9 @@ def best_five(hand, community):
             comparehand.reverse()
             if compare_hands(currentbest, comparehand) == 1:
                 currentbest = hand_copy(comparehand)
-    #
+
     # Compare current best to five cards including both player cards
-    #
+
     for m in range(5):
         for n in range(m + 1, 5):
             comparehand = hand_copy(community)
@@ -407,9 +397,9 @@ def best_five(hand, community):
 
 
 def main():
-    #
+
     # Process command-line arguments
-    #
+
     parser = argparse.ArgumentParser(description='Run a Monte Carlo simulation \
                                      of a Texas Hold\'em Poker Hand')
     parser.add_argument('iterations', metavar='num_iterations', type=int,
