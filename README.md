@@ -9,6 +9,10 @@ Roka je seszavljena iz ranka karte: A, K, Q, J, 10, 9, 8, 7, 6, 5, 4, 3, 2 in iz
 
 Karta formata Xx je poljubna karta in je uporabljena samo za skupne karte.
 
-Primer uporabe:
+Primer uporabe(--community lahko prazen):
 
 python pokersim.py --hand1 AcTd --hand2 Qh5s --community XxXxXxXxXx 1000
+
+ali 
+
+python pokersim.py --hand1 AcTd --hand2 Qh5s 1000
