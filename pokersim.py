@@ -459,12 +459,12 @@ def main():
         best_hand2 = best_five(handnum2, community_temp)
         totals[compare_hands(best_hand1, best_hand2)] += 1
     # Print results
-    print "Total Hands: %i" % (iterations)
-    print "Hand1: %i Hand2: %i Ties: %i" % (totals[0], totals[1], totals[2])
-    print "Hand1: %.2f%% Hand2: %.2f%% Ties: %.2f%%" % \
+    print("Total Hands: %i" % (iterations))
+    print("Hand1: %i Hand2: %i Ties: %i" % (totals[0], totals[1], totals[2]))
+    print("Hand1: %.2f%% Hand2: %.2f%% Ties: %.2f%%" % \
         (100 * round((totals[0] / (iterations + 0.0)), 4),
          100 * round((totals[1] / (iterations + 0.0)), 4),
-         100 * round((totals[2] / (iterations + 0.0)), 4))
+         100 * round((totals[2] / (iterations + 0.0)), 4)))
 
 #
 # Main Program Body
